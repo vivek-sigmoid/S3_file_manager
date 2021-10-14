@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S3 Object List</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="static/navbar.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="topnav">
+    <a class="active">{{ current_bucket }}</a>
+    <a href="/">Switch Buckets</a>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12-xs">
+            <form action="{{ url_for('move_file') }}" class="rename-file" method="POST">
+                <table border="1px" class="table table-striped" width="80%">
+                    <tr>
+                        <th colspan="2">
+                            From
+                        </th>
+                        <th colspan="2">
+                            To
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Current Bucket
+                        </th>
+                        <th>
+                            Files in {{ current_bucket }}
+                        </th>
+                        <th>
+                            Destination Bucket
+                        </th>
+                        <th>
+                            Pathname/Filename
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="control">
+                                <label class="radio">
+                                    <input checked name="current_bucket" type="radio">
+                                    {{ current_bucket }}
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <select name="file_name">
+                                {% for file in files %}
+                                <option value="{{ file.key }}"> {{ file.key }}</option>
+                                {% endfor%}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="to_bucket">
+                                {% for bucket in buckets %}
+                                <option value="{{ bucket }}"> {{ bucket }}</option>
+                                {% endfor%}
+                            </select>
+                        </td>
+                        <td>
+                            <input name="new_name" placeholder="Enter path/new_name" type="text">
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit"><i class="fa ">Move</i></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

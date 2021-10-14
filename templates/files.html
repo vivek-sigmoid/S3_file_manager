@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S3 Object List</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="static/navbar.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+{% block content %}
+<div class="topnav">
+    <a class="active">{{ my_bucket.name }}</a>
+    <a href="/">Switch Buckets</a>
+    <div class="search-container">
+        <form action="">
+            <input name="search" placeholder="Search.." type="text">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12-xs">
+            <table class="table table-striped">
+                <tr>
+                    <th>Filename</th>
+                    <th>Type</th>
+                    <th>Last Modified</th>
+                </tr>
+
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.key }}</td>
+                    <td>{{ file.key | file_type }}</td>
+                    <td>{{ file.last_modified | datetimeformat }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_file') }}" class="delete-form" method="POST">
+                            <input name="file_name" type="hidden" value="{{ file.key }}">
+                            <input name="bucket_name" type="hidden" value="{{ my_bucket.name }}">
+                            <button class="btn btn-danger btn-sm" type="submit">
+                                <i class="fa fa-trash-alt">Delete File</i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_folder') }}" class="delete-folder-form" method="POST">
+                            <input name="folder_name" type="hidden" value="{{ file.key }}">
+                            <input name="bucket_name" type="hidden" value="{{ my_bucket.name }}">
+                            <button class="btn btn-danger btn-sm" type="submit">
+                                <i class="fa fa-trash-alt">Delete containing folder</i>
+                            </button>
+                        </form>
+                    <td>
+                        <form action="{{ url_for('open_file_in_browser') }}" class="open-form-or-download"
+                              method="POST">
+                            <input name="file_name" type="hidden" value="{{ file.key }}">
+                            <input name="bucket_name" type="hidden" value="{{ my_bucket.name }}">
+                            <button class="btn btn-info" type="submit">
+                                <i class="fa fa-open">Open File</i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('download_file') }}" class="open-form-or-download"
+                              method="POST">
+                            <input name="file_name" type="hidden" value="{{ file.key }}">
+                            <input name="bucket_name" type="hidden" value="{{ my_bucket.name }}">
+                            <button class="btn btn-info" type="submit"><i class="fa fa-download"></i></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('rename_file') }}" class="rename-file"
+                              method="POST">
+                            <input name="file_name" type="hidden" value="{{ file.key }}">
+                            <input name="bucket_name" type="hidden" value="{{ my_bucket.name }}">
+                            <input name="new_name" placeholder="Enter path/new_name" type="text">
+                            <button class="btn " type="submit">
+                                <i>Move/Rename</i>
+                            </button>
+                        </form>
+                    </td>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <button class="btn"><a href="file_move_page">Cut & Paste</a></button>
+    <button class="btn"><a href="file_copy_page">Copy & Paste </a></button>
+
+</div>
+
+{% endblock %}
+
+</body>
+</html>

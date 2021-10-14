@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S3 Object List</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<p>
+<div class="container">
+    <div class="col-12-xs">
+        <table class="table table-striped">
+            <tr>
+                <th>Bucket Name</th>
+                <th></th>
+            </tr>
+
+            {% for bucket in buckets %}
+            <tr>
+                <td>{{ bucket }}</td>
+                <td>
+                    <form action="{{ url_for('files') }}" class="select-bucket" method="post">
+                        <input name="bucket" type="hidden" value="{{ bucket }}">
+                        <input name="pwd" type="hidden" value="nil">
+                        <button class="btn btn-primary btn-sm" type="submit">
+                            <i class="fa fa-archive"></i>
+                            Select
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+</p>
+</script>
+</body>
+</html>
